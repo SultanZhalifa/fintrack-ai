@@ -1,0 +1,73 @@
+/* ============================================================
+   FinTrack.ai — Warm Light Design Tokens
+   Eye-friendly ivory / terracotta / sage palette.
+   ============================================================ */
+
+:root {
+  /* Surfaces */
+  --bg:          #FAF6F0;  /* ivory page background */
+  --surface:     #FFFFFF;  /* primary card */
+  --surface-2:   #FDF8F2;  /* subtle warm card / inset */
+  --surface-3:   #F5ECE1;  /* hover / muted fill */
+  --overlay:     rgba(58, 50, 43, 0.45);
+
+  /* Text */
+  --text-1:      #3A322B;  /* primary, ~9:1 on bg */
+  --text-2:      #6B5E52;  /* secondary */
+  --text-3:      #998A7B;  /* muted / meta */
+  --text-on-accent: #FFFFFF;
+
+  /* Brand & semantic */
+  --accent:      #C2703D;  /* terracotta */
+  --accent-700:  #A85B2C;
+  --accent-soft: #F3E2D5;  /* accent tint background */
+  --income:      #4B8B6F;  /* sage green */
+  --income-soft: #E2EFE8;
+  --expense:     #C8553D;  /* warm red */
+  --expense-soft:#F6E0DA;
+  --warning:     #D99A4E;  /* amber */
+  --warning-soft:#FAEEDB;
+  --info:        #5B7C99;  /* muted slate-blue */
+  --info-soft:   #E5EBF0;
+
+  /* Borders */
+  --border:      #ECE2D6;
+  --border-2:    #E0D3C3;
+  --border-strong:#D2C2AE;
+
+  /* Shadows — soft & warm */
+  --shadow-sm:   0 1px 2px rgba(58, 50, 43, 0.06);
+  --shadow:      0 2px 8px rgba(58, 50, 43, 0.07), 0 1px 2px rgba(58, 50, 43, 0.05);
+  --shadow-lg:   0 12px 32px rgba(58, 50, 43, 0.12), 0 4px 8px rgba(58, 50, 43, 0.06);
+  --shadow-accent: 0 6px 18px rgba(194, 112, 61, 0.22);
+
+  /* Radii */
+  --r-sm: 8px;
+  --r:    12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-full: 999px;
+
+  /* Typography */
+  --font:   'Inter', system-ui, -apple-system, sans-serif;
+  --font-d: 'Space Grotesk', var(--font);
+
+  /* Layout */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 76px;
+  --topbar-h: 60px;
+  --content-max: 1200px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur:  0.22s;
+
+  /* Chart palette (warm categorical) */
+  --c1: #C2703D; --c2: #4B8B6F; --c3: #D99A4E; --c4: #8C6A52;
+  --c5: #B5544A; --c6: #6E8C7E; --c7: #D4A373; --c8: #9C6B4F; --c9: #7A8B99;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0.001s; }
+  * { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+}
