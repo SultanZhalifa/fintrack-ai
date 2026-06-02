@@ -196,6 +196,39 @@ export default {
   'smart.remaining': 'Sisa bulan ini',
   'smart.noBudgets': 'Atur anggaran untuk membuka panduan aman dibelanjakan.',
 
+  // Skor kesehatan
+  'health.title': 'Kesehatan Finansial',
+  'health.sub': 'Skor 0-100 dari data aslimu',
+  'health.grade.excellent': 'Sangat baik',
+  'health.grade.good': 'Baik',
+  'health.grade.fair': 'Cukup',
+  'health.grade.poor': 'Perlu perbaikan',
+  'health.needData': 'Tambahkan pemasukan dan pengeluaran untuk menghitung skormu.',
+  'health.pillar.savings': 'Tingkat menabung',
+  'health.pillar.budget': 'Kepatuhan anggaran',
+  'health.pillar.stability': 'Stabilitas pengeluaran',
+  'health.pillar.buffer': 'Dana darurat',
+
+  // Kartu wawasan berbasis aturan
+  'insight.title': 'Wawasan Cerdas',
+  'insight.sub': 'Pengamatan otomatis dari aktivitasmu',
+  'insight.none': 'Belum ada pola menonjol — terus catat.',
+  'insight.spike': 'Pengeluaran {category} naik {pct}% bulan ini ({amount}).',
+  'insight.drop': 'Pengeluaran {category} turun {pct}% bulan ini. Bagus.',
+  'insight.over': 'Kamu melebihi anggaran {category} sebesar {amount}.',
+  'insight.saveGood': 'Bulan yang kuat — kamu menabung {pct}% dari pemasukan.',
+  'insight.saveNeg': 'Kamu membelanjakan lebih dari yang kamu hasilkan periode ini.',
+  'insight.saveLow': 'Tingkat menabung {pct}%. Targetkan minimal 10%.',
+  'insight.concentration': '{category} adalah {pct}% pengeluaran bulan ini.',
+
+  // Palet perintah
+  'cmd.placeholder': 'Cari aksi dan halaman…',
+  'cmd.addTransaction': 'Tambah transaksi',
+  'cmd.goTo': 'Buka {page}',
+  'cmd.refreshRates': 'Perbarui kurs',
+  'cmd.empty': 'Tidak ada hasil',
+  'cmd.hint': 'Ctrl/Cmd + K',
+
   // Wawasan AI
   'ai.title': 'Wawasan Pengeluaran AI',
   'ai.poweredBy': 'Didukung Gemini',

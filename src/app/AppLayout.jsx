@@ -1,18 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from '../components/layout/Sidebar';
 import MobileNav from '../components/layout/MobileNav';
+import CommandPalette from '../components/CommandPalette';
+import TransactionModal from '../features/transactions/TransactionModal';
 import { ROUTES, getRoute } from './routes';
 
 /**
- * AppLayout — responsive shell: desktop sidebar + mobile drawer + page switch.
- * Pages are animated on transition with a subtle fade/slide.
+ * AppLayout — responsive shell: desktop sidebar + mobile drawer + page switch,
+ * plus a global command palette (Ctrl/Cmd-K) and quick add-transaction modal.
  */
 export default function AppLayout() {
   const [page, setPage] = useState('dashboard');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
 
   const { Component } = getRoute(page);
+
+  // Global Ctrl/Cmd-K to toggle the command palette.
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <div className="app-shell">
@@ -35,6 +51,14 @@ export default function AppLayout() {
           </AnimatePresence>
         </main>
       </div>
+
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onNavigate={setPage}
+        onAddTransaction={() => setAddOpen(true)}
+      />
+      <TransactionModal open={addOpen} onClose={() => setAddOpen(false)} />
     </div>
   );
 }

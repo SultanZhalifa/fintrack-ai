@@ -12,6 +12,7 @@ import { getAccountBalances } from '../lib/accounts';
 import { materializeRecurring, nextDueLabel } from '../lib/recurring';
 import { forecastMonth } from '../lib/forecast';
 import { getSmartBudget } from '../lib/budgeting';
+import { getHealthScore } from '../lib/health';
 
 // Start empty — real user data only. Existing data is read straight from storage.
 const initial = (key, fallback) => readStorage(key, fallback);
@@ -181,6 +182,7 @@ export function FinanceProvider({ children }) {
     const { balances, netWorth } = getAccountBalances(accounts, transactions);
     const now = new Date();
     return {
+      healthScore: getHealthScore(transactions, budgets, netWorth, now),
       summary: getSummary(transactions),
       savingsRate: getSavingsRate(transactions),
       monthlyData: getMonthlyData(transactions, 6),
