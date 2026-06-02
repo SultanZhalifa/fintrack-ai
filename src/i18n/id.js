@@ -185,6 +185,17 @@ export default {
   'budget.removeTitle': 'Hapus anggaran?',
   'budget.removeConfirm': 'Anggaran untuk {category} akan dihapus.',
 
+  // Anggaran cerdas
+  'smart.title': 'Aman Dibelanjakan',
+  'smart.perDay': 'per hari',
+  'smart.sub': '{amount} tersisa untuk {days} hari',
+  'smart.onTrack': 'Sesuai jalur',
+  'smart.overPace': 'Boros',
+  'smart.pace': 'Laju',
+  'smart.idealVsActual': '{spent} terpakai vs {ideal} ideal hingga hari ini',
+  'smart.remaining': 'Sisa bulan ini',
+  'smart.noBudgets': 'Atur anggaran untuk membuka panduan aman dibelanjakan.',
+
   // Wawasan AI
   'ai.title': 'Wawasan Pengeluaran AI',
   'ai.poweredBy': 'Didukung Gemini',
