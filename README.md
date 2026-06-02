@@ -1,38 +1,42 @@
 # FinTrack.ai
 
-> AI-powered personal finance tracker — built with React, Chart.js, and Gemini AI.
+A warm, eye-friendly personal finance tracker built with React and Vite. Track income and expenses, set monthly budgets, visualize spending, and get AI-powered insights — all in the browser, with no backend and no account required.
 
-**Live Demo:** [fintrack-ai.vercel.app](https://fintrack-ai.vercel.app) &nbsp;|&nbsp; **Stack:** React + Vite + Gemini AI
+**Stack:** React 19 - Vite 8 - Chart.js - Framer Motion - Gemini AI
+**Storage:** localStorage (your data never leaves your device)
 
 ---
 
-## Overview
+## Highlights
 
-FinTrack.ai is a personal finance web app that helps you track income and expenses, visualize spending patterns, and get AI-powered financial insights using Google's Gemini API — all running in the browser with no backend required.
+- **Warm, accessible design** — an ivory / terracotta / sage palette chosen for readability and low eye strain, with consistent design tokens, soft shadows, and reduced-motion support.
+- **Fully responsive** — fixed sidebar on desktop, off-canvas drawer navigation on mobile, and fluid grids that reflow from 4 columns down to 1.
+- **Enterprise-grade structure** — a clean, layered architecture (UI primitives, feature modules, hooks, context, and pure library functions) that is easy to read, test, and extend.
 
 ## Features
 
-- **Dashboard** — Balance, income, expense, and savings rate at a glance
-- **Add Transactions** — Income/expense modal with category tagging
-- **Monthly Bar Chart** — 6-month income vs expense comparison
-- **Category Doughnut** — Visual expense breakdown by category
-- **Transaction History** — Filterable list with delete support
-- **AI Insights** — Gemini AI analyzes your spending and gives 5 personalized tips
-- **Local Persistence** — Data stored in localStorage, no account needed
-- **Responsive** — Works on desktop and mobile
+### Tracking
+- Add, **edit**, and delete income or expense transactions
+- Category tagging with a friendly icon per category
+- Inline form validation and confirmation before destructive actions
+- Toast notifications for every action
 
-## Tech Stack
+### Insight
+- **Dashboard** — total balance with month-over-month change, income, expenses, and savings rate
+- **Monthly overview** — six-month income vs. expense bar chart
+- **Expense breakdown** — category doughnut chart
+- **Net cash-flow trend** — month-by-month line chart
+- **Analytics highlights** — top spending category and largest transaction
 
-| Layer | Tech |
-|-------|------|
-| Framework | React 18 + Vite |
-| Charts | Chart.js + react-chartjs-2 |
-| Animations | Framer Motion |
-| AI | Google Gemini API (gemini-2.0-flash) |
-| Storage | localStorage |
-| Icons | React Icons (Feather) |
-| Fonts | Inter + Space Grotesk |
-| Deploy | Vercel |
+### Budgets
+- Set a monthly limit per category
+- Visual progress bars with warning and over-budget states
+- Overall monthly budget summary
+
+### Data and AI
+- **Search and filter** transactions by text, type, category, date range, and sort order
+- **Export to CSV** for spreadsheets and **import / export a JSON backup** to move data between devices
+- **AI insights** — Gemini analyzes your spending and returns five tailored tips (with a built-in offline demo when no API key is set)
 
 ## Getting Started
 
@@ -43,36 +47,75 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5174`
-
-## Enable AI Insights (Optional)
-
-Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com), then:
+Then open http://localhost:5174
 
 ```bash
-# Create .env.local
+npm run build     # production build
+npm run preview   # preview the production build
+npm run lint      # lint the project
+```
+
+## Enable AI Insights (optional)
+
+Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com), then create a `.env.local` file in the project root:
+
+```bash
 VITE_GEMINI_KEY=your_gemini_api_key_here
 ```
 
-Without the key, the app runs in offline demo mode with sample insights.
+Without a key, AI Insights runs in offline demo mode with sample advice.
 
-## Project Structure
+## Architecture
+
+The codebase is organized by concern. UI primitives are dumb and reusable; features compose them; all calculation lives in pure, side-effect-free library functions; and state is centralized in React context backed by localStorage.
 
 ```
-fintrack-ai/
-├── src/
-│   ├── components/
-│   │   ├── StatCards.jsx       # Summary stat cards
-│   │   ├── Charts.jsx          # Bar & Doughnut charts
-│   │   ├── AddTransaction.jsx  # Add transaction modal
-│   │   ├── TransactionList.jsx # Transaction history + filter
-│   │   └── AIInsights.jsx      # Gemini AI analysis panel
-│   ├── store.js                # localStorage data layer
-│   ├── App.jsx                 # Main shell + routing
-│   └── index.css               # Design system
-└── README.md
+src/
+  main.jsx                  Entry point
+  App.jsx                   Root: global providers + layout
+  app/
+    AppLayout.jsx           Responsive shell (sidebar + drawer + page switch)
+    routes.jsx              Page registry (drives nav, header, content)
+  components/
+    ui/                     Design-system primitives
+      Button, IconButton, Card, Modal, ConfirmDialog,
+      Field (Input/Select), Badge, ProgressBar, EmptyState
+    layout/                 Brand, Sidebar, MobileNav, NavList, PageHeader
+  context/
+    FinanceContext.jsx      Transactions + budgets state, CRUD, derived data
+    ToastContext.jsx        Toast notifications
+  features/
+    dashboard/              Dashboard page, stat cards, budget widget
+    transactions/           List, row, filters, add/edit modal
+    analytics/              Monthly, category, and trend charts
+    budgets/                Budgets page, budget cards, budget modal
+    insights/               AI insights page
+  hooks/
+    useLocalStorage.js      State synced to localStorage
+    useMediaQuery.js        Reactive breakpoints (useSyncExternalStore)
+  lib/
+    storage.js              Safe localStorage wrapper
+    finance.js              Pure financial calculations
+    format.js               Currency, date, and percentage formatters
+    csv.js                  CSV export + JSON backup import/export
+    gemini.js               Gemini client with offline fallback
+  constants/
+    config.js               Storage keys, app config, chart colors
+    categories.js           Categories and icons
+    seed.js                 Demo data for first run
+  styles/
+    theme.css               Warm-light design tokens
+    base.css                Reset, typography, focus, scrollbars
+    components.css          Shared component classes + responsive rules
 ```
 
----
+### Design principles
 
-Built by Sultan Zhalifunnas Musyaffa — [sultanzhalifunnasmusyaffa@gmail.com](mailto:sultanzhalifunnasmusyaffa@gmail.com)
+- **Separation of concerns** — calculation (`lib/`), state (`context/`), presentation (`components/`, `features/`) never bleed into each other.
+- **Single source of truth** — `FinanceContext` owns all data; components read derived selectors rather than recomputing.
+- **Pure and testable** — every function in `lib/finance.js` takes inputs and returns outputs with no side effects.
+- **Accessible by default** — keyboard focus styles, `aria` labels, Escape-to-close dialogs, and respect for `prefers-reduced-motion`.
+
+## License
+
+Built by Sultan Zhalifunnas Musyaffa - [sultanzhalifunnasmusyaffa@gmail.com](mailto:sultanzhalifunnasmusyaffa@gmail.com)
