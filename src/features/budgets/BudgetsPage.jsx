@@ -13,6 +13,7 @@ import { useFormat } from '../../hooks/useFormat';
 import { useT } from '../../i18n/i18n-context';
 import BudgetCard from './BudgetCard';
 import BudgetModal from './BudgetModal';
+import SmartBudgetCard from './SmartBudgetCard';
 
 export default function BudgetsPage() {
   const route = getRoute('budgets');
@@ -45,12 +46,15 @@ export default function BudgetsPage() {
       <PageHeader title={t(route.labelKey)} subtitle={t(route.subKey)} actions={actions} />
 
       {budgetStatus.length > 0 && (
-        <Card title={t('budget.overall')} subtitle={t('budget.overallSub', { spent: fmt.money(totalSpent), total: fmt.money(totalBudget) })} className="card-hover" style={{ marginBottom: 16 }}>
-          <ProgressBar value={Math.min(overallPct, 100)} color={overallPct > 100 ? 'var(--expense)' : overallPct > 80 ? 'var(--warning)' : 'var(--accent)'} />
-          <div style={{ marginTop: 10, fontSize: '0.85rem', color: 'var(--text-3)' }} className="mono-num">
-            {t('budget.ofTotal', { pct: Math.round(overallPct) })}
-          </div>
-        </Card>
+        <div className="two-col" style={{ marginBottom: 16 }}>
+          <SmartBudgetCard delay={0.02} />
+          <Card title={t('budget.overall')} subtitle={t('budget.overallSub', { spent: fmt.money(totalSpent), total: fmt.money(totalBudget) })} className="card-hover" delay={0.04}>
+            <ProgressBar value={Math.min(overallPct, 100)} color={overallPct > 100 ? 'var(--expense)' : overallPct > 80 ? 'var(--warning)' : 'var(--accent)'} />
+            <div style={{ marginTop: 10, fontSize: '0.85rem', color: 'var(--text-3)' }} className="mono-num">
+              {t('budget.ofTotal', { pct: Math.round(overallPct) })}
+            </div>
+          </Card>
+        </div>
       )}
 
       {budgetStatus.length === 0 ? (

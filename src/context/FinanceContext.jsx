@@ -11,6 +11,7 @@ import {
 import { getAccountBalances } from '../lib/accounts';
 import { materializeRecurring, nextDueLabel } from '../lib/recurring';
 import { forecastMonth } from '../lib/forecast';
+import { getSmartBudget } from '../lib/budgeting';
 
 // Start empty — real user data only. Existing data is read straight from storage.
 const initial = (key, fallback) => readStorage(key, fallback);
@@ -191,6 +192,7 @@ export function FinanceProvider({ children }) {
       netWorth,
       forecast: forecastMonth(transactions, recurrings, now),
       recurringsDetailed: recurrings.map((r) => ({ ...r, nextDue: nextDueLabel(r, now) })),
+      smartBudget: getSmartBudget(transactions, budgets, now),
     };
   }, [transactions, budgets, accounts, recurrings]);
 

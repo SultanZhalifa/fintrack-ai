@@ -185,6 +185,17 @@ export default {
   'budget.removeTitle': 'Remove budget?',
   'budget.removeConfirm': 'The budget for {category} will be removed.',
 
+  // Smart budgeting
+  'smart.title': 'Safe to Spend',
+  'smart.perDay': 'per day',
+  'smart.sub': '{amount} left over {days} days',
+  'smart.onTrack': 'On track',
+  'smart.overPace': 'Spending fast',
+  'smart.pace': 'Pace',
+  'smart.idealVsActual': '{spent} spent vs {ideal} ideal by today',
+  'smart.remaining': 'Remaining this month',
+  'smart.noBudgets': 'Set budgets to unlock safe-to-spend guidance.',
+
   // AI Insights
   'ai.title': 'AI Spending Insights',
   'ai.poweredBy': 'Powered by Gemini',
