@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from '../../components/ui/Modal';
 import Button from '../../components/ui/Button';
 import { Field, Input, Select } from '../../components/ui/Field';
-import { CATEGORIES } from '../../constants/categories';
+import { categoriesOfType } from '../../constants/categories';
 import { useFinance } from '../../context/finance-context';
 import { useToast } from '../../context/toast-context';
 import { useSettings } from '../../context/settings-context';
@@ -14,7 +14,7 @@ import { convertToBase, convertFromBase, currencyMeta } from '../../lib/currency
  * The limit is entered/displayed in the user's currency and stored in IDR base.
  */
 function BudgetForm({ editing, onClose }) {
-  const { budgets, setBudget } = useFinance();
+  const { budgets, setBudget, categories } = useFinance();
   const { notify } = useToast();
   const { baseCurrency, rates } = useSettings();
   const t = useT();
@@ -43,7 +43,7 @@ function BudgetForm({ editing, onClose }) {
         <Field label={t('tx.category')}>
           <Select value={category} onChange={(e) => setCategory(e.target.value)} disabled={!!editing}>
             <option value="">{t('tx.selectCategory')}</option>
-            {CATEGORIES.expense.map((c) => <option key={c} value={c}>{c}</option>)}
+            {categoriesOfType(categories, 'expense').map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
           </Select>
         </Field>
       </div>

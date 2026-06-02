@@ -2,6 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { FinanceContext } from './finance-context';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { STORAGE_KEYS } from '../constants/config';
+import { DEFAULT_CATEGORIES } from '../constants/categories';
 import { readStorage } from '../lib/storage';
 import {
   getSummary, getSavingsRate, getMonthlyData, getCategoryBreakdown,
@@ -17,6 +18,8 @@ export function FinanceProvider({ children }) {
   const [transactions, setTransactions] = useLocalStorage(STORAGE_KEYS.transactions, initial(STORAGE_KEYS.transactions, []));
   const [budgets, setBudgets] = useLocalStorage(STORAGE_KEYS.budgets, initial(STORAGE_KEYS.budgets, {}));
   const [accounts, setAccounts] = useLocalStorage(STORAGE_KEYS.accounts, initial(STORAGE_KEYS.accounts, []));
+  // Categories default to the curated set; users edit/add/remove from there.
+  const [categories, setCategories] = useLocalStorage(STORAGE_KEYS.categories, initial(STORAGE_KEYS.categories, DEFAULT_CATEGORIES));
 
   // ---- Transaction CRUD ----
   const addTransaction = useCallback((tx) => {
@@ -84,17 +87,19 @@ export function FinanceProvider({ children }) {
   }, [setAccounts, setTransactions]);
 
   // ---- Bulk data ops ----
-  const replaceAll = useCallback((nextTxs, nextBudgets, nextAccounts) => {
+  const replaceAll = useCallback((nextTxs, nextBudgets, nextAccounts, nextCategories) => {
     setTransactions(Array.isArray(nextTxs) ? nextTxs : []);
     if (nextBudgets) setBudgets(nextBudgets);
     if (nextAccounts) setAccounts(Array.isArray(nextAccounts) ? nextAccounts : []);
-  }, [setTransactions, setBudgets, setAccounts]);
+    if (Array.isArray(nextCategories) && nextCategories.length) setCategories(nextCategories);
+  }, [setTransactions, setBudgets, setAccounts, setCategories]);
 
   const clearAll = useCallback(() => {
     setTransactions([]);
     setBudgets({});
     setAccounts([]);
-  }, [setTransactions, setBudgets, setAccounts]);
+    setCategories(DEFAULT_CATEGORIES);
+  }, [setTransactions, setBudgets, setAccounts, setCategories]);
 
   // ---- Budget CRUD ----
   const setBudget = useCallback((category, amount) => {
@@ -108,6 +113,23 @@ export function FinanceProvider({ children }) {
       return next;
     });
   }, [setBudgets]);
+
+  // ---- Category CRUD (keyed by unique name) ----
+  const addCategory = useCallback((cat) => {
+    const name = cat.name?.trim();
+    if (!name) return null;
+    const newCat = { name, type: cat.type || 'expense', icon: cat.icon || 'package', color: cat.color || '#998A7B' };
+    setCategories((prev) => (prev.some((c) => c.name === name) ? prev : [...prev, newCat]));
+    return newCat;
+  }, [setCategories]);
+
+  const updateCategory = useCallback((name, patch) => {
+    setCategories((prev) => prev.map((c) => (c.name === name ? { ...c, ...patch, name } : c)));
+  }, [setCategories]);
+
+  const removeCategory = useCallback((name) => {
+    setCategories((prev) => prev.filter((c) => c.name !== name));
+  }, [setCategories]);
 
   // ---- Derived selectors (memoized) ----
   const derived = useMemo(() => {
@@ -126,15 +148,17 @@ export function FinanceProvider({ children }) {
   }, [transactions, budgets, accounts]);
 
   const value = useMemo(() => ({
-    transactions, budgets, accounts,
+    transactions, budgets, accounts, categories,
     addTransaction, updateTransaction, deleteTransaction,
     addTransfer, addAccount, updateAccount, deleteAccount,
+    addCategory, updateCategory, removeCategory,
     replaceAll, clearAll, setBudget, removeBudget,
     ...derived,
   }), [
-    transactions, budgets, accounts,
+    transactions, budgets, accounts, categories,
     addTransaction, updateTransaction, deleteTransaction,
     addTransfer, addAccount, updateAccount, deleteAccount,
+    addCategory, updateCategory, removeCategory,
     replaceAll, clearAll, setBudget, removeBudget, derived,
   ]);
 

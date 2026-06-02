@@ -43,8 +43,8 @@ export default function TransactionsPage() {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const { transactions: txs, budgets, accounts } = parseBackupJSON(reader.result);
-        replaceAll(txs, budgets, accounts);
+        const { transactions: txs, budgets, accounts, categories } = parseBackupJSON(reader.result);
+        replaceAll(txs, budgets, accounts, categories);
         notify(t('settings.imported', { count: txs.length }), 'success');
       } catch {
         notify(t('settings.importFailed'), 'error');
