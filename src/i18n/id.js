@@ -196,6 +196,17 @@ export default {
   'smart.remaining': 'Sisa bulan ini',
   'smart.noBudgets': 'Atur anggaran untuk membuka panduan aman dibelanjakan.',
 
+  // Orientasi awal
+  'onboard.welcome': 'Selamat datang di FinTrack',
+  'onboard.tagline': 'Pendamping keuangan pribadimu, local-first.',
+  'onboard.chooseLanguage': 'Pilih bahasamu',
+  'onboard.chooseCurrency': 'Pilih mata uangmu',
+  'onboard.privacy': 'Semua tetap di perangkat ini. Tanpa akun, tanpa pelacakan.',
+  'onboard.start': 'Mulai',
+  'onboard.step': 'Langkah {n} dari {total}',
+  'onboard.next': 'Lanjut',
+  'onboard.back': 'Kembali',
+
   // Skor kesehatan
   'health.title': 'Kesehatan Finansial',
   'health.sub': 'Skor 0-100 dari data aslimu',

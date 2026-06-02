@@ -196,6 +196,17 @@ export default {
   'smart.remaining': 'Remaining this month',
   'smart.noBudgets': 'Set budgets to unlock safe-to-spend guidance.',
 
+  // Onboarding
+  'onboard.welcome': 'Welcome to FinTrack',
+  'onboard.tagline': 'Your private, local-first finance companion.',
+  'onboard.chooseLanguage': 'Choose your language',
+  'onboard.chooseCurrency': 'Choose your currency',
+  'onboard.privacy': 'Everything stays on this device. No account, no tracking.',
+  'onboard.start': 'Get Started',
+  'onboard.step': 'Step {n} of {total}',
+  'onboard.next': 'Next',
+  'onboard.back': 'Back',
+
   // Health score
   'health.title': 'Financial Health',
   'health.sub': 'A 0-100 score from your real data',

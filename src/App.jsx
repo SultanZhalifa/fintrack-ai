@@ -4,16 +4,21 @@ import { I18nProvider } from './i18n/I18nProvider';
 import { FinanceProvider } from './context/FinanceContext';
 import { ToastProvider } from './context/ToastContext';
 import AppLayout from './app/AppLayout';
+import OnboardingFlow from './features/onboarding/OnboardingFlow';
 
 /** Bridges the active language from settings into the i18n provider. */
 function LocalizedApp() {
-  const { language } = useSettings();
+  const { language, onboarded } = useSettings();
   return (
     <I18nProvider language={language}>
       <ToastProvider>
-        <FinanceProvider>
-          <AppLayout />
-        </FinanceProvider>
+        {onboarded ? (
+          <FinanceProvider>
+            <AppLayout />
+          </FinanceProvider>
+        ) : (
+          <OnboardingFlow />
+        )}
       </ToastProvider>
     </I18nProvider>
   );
