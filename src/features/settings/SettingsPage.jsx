@@ -33,7 +33,7 @@ function Row({ icon, title, sub, children }) {
 export default function SettingsPage() {
   const route = getRoute('settings');
   const { baseCurrency, language, ratesUpdatedAt, rates, setBaseCurrency, setLanguage, refreshRates } = useSettings();
-  const { transactions, budgets, accounts, categories, clearAll, replaceAll } = useFinance();
+  const { transactions, budgets, accounts, categories, recurrings, clearAll, replaceAll } = useFinance();
   const { notify } = useToast();
   const t = useT();
   const [refreshing, setRefreshing] = useState(false);
@@ -55,7 +55,7 @@ export default function SettingsPage() {
   };
 
   const handleExport = () => {
-    exportBackupJSON({ transactions, budgets, accounts, categories });
+    exportBackupJSON({ transactions, budgets, accounts, categories, recurrings });
     notify(t('settings.exported'), 'success');
   };
 
@@ -67,7 +67,7 @@ export default function SettingsPage() {
     reader.onload = () => {
       try {
         const parsed = parseBackupJSON(reader.result);
-        replaceAll(parsed.transactions, parsed.budgets, parsed.accounts, parsed.categories);
+        replaceAll(parsed.transactions, parsed.budgets, parsed.accounts, parsed.categories, parsed.recurrings);
         notify(t('settings.imported', { count: parsed.transactions.length }), 'success');
       } catch {
         notify(t('settings.importFailed'), 'error');

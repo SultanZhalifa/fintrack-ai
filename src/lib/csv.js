@@ -49,5 +49,6 @@ export function parseBackupJSON(text) {
     budgets: data.budgets && typeof data.budgets === 'object' ? data.budgets : {},
     accounts: Array.isArray(data.accounts) ? data.accounts : [],
     categories: Array.isArray(data.categories) ? data.categories : null,
+    recurrings: Array.isArray(data.recurrings) ? data.recurrings : [],
   };
 }
