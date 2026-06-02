@@ -1,41 +1,45 @@
 /**
- * Transaction categories + their SVG icons (react-icons/fi), grouped by type.
- * No emoji anywhere — every glyph is a real vector icon.
+ * Default categories. Each is { name, type, icon (registry key), color }.
+ * On first run these seed the editable category store; users can add/edit/remove
+ * their own. Transactions and budgets are keyed by category NAME (unique).
  */
-import {
-  FiBriefcase, FiCode, FiTrendingUp, FiGift, FiDollarSign,
-  FiCoffee, FiTruck, FiHome, FiShoppingBag, FiHeart,
-  FiMonitor, FiBookOpen, FiZap, FiPackage,
-} from 'react-icons/fi';
+import { resolveIcon, ICON_REGISTRY } from './categoryIcons';
 
-export const CATEGORIES = {
-  income:  ['Salary', 'Freelance', 'Investment', 'Gift', 'Other Income'],
-  expense: ['Food', 'Transport', 'Housing', 'Shopping', 'Health', 'Entertainment', 'Education', 'Utilities', 'Other'],
-};
-
-/** Category -> { Icon, color } using the warm chart palette tones. */
-export const CATEGORY_META = {
+export const DEFAULT_CATEGORIES = [
   // income
-  Salary:        { Icon: FiBriefcase,   color: '#4B8B6F' },
-  Freelance:     { Icon: FiCode,        color: '#6E8C7E' },
-  Investment:    { Icon: FiTrendingUp,  color: '#4B8B6F' },
-  Gift:          { Icon: FiGift,        color: '#D99A4E' },
-  'Other Income':{ Icon: FiDollarSign,  color: '#4B8B6F' },
+  { name: 'Salary',        type: 'income',  icon: 'briefcase', color: '#4B8B6F' },
+  { name: 'Freelance',     type: 'income',  icon: 'code',      color: '#6E8C7E' },
+  { name: 'Investment',    type: 'income',  icon: 'trending',  color: '#4B8B6F' },
+  { name: 'Gift',          type: 'income',  icon: 'gift',      color: '#D99A4E' },
+  { name: 'Other Income',  type: 'income',  icon: 'dollar',    color: '#4B8B6F' },
   // expense
-  Food:          { Icon: FiCoffee,      color: '#C2703D' },
-  Transport:     { Icon: FiTruck,       color: '#8C6A52' },
-  Housing:       { Icon: FiHome,        color: '#B5544A' },
-  Shopping:      { Icon: FiShoppingBag, color: '#D4A373' },
-  Health:        { Icon: FiHeart,       color: '#C8553D' },
-  Entertainment: { Icon: FiMonitor,     color: '#9C6B4F' },
-  Education:     { Icon: FiBookOpen,    color: '#7A8B99' },
-  Utilities:     { Icon: FiZap,         color: '#D99A4E' },
-  Other:         { Icon: FiPackage,     color: '#998A7B' },
-};
+  { name: 'Food',          type: 'expense', icon: 'coffee',    color: '#C2703D' },
+  { name: 'Transport',     type: 'expense', icon: 'truck',     color: '#8C6A52' },
+  { name: 'Housing',       type: 'expense', icon: 'home',      color: '#B5544A' },
+  { name: 'Shopping',      type: 'expense', icon: 'bag',       color: '#D4A373' },
+  { name: 'Health',        type: 'expense', icon: 'heart',     color: '#C8553D' },
+  { name: 'Entertainment', type: 'expense', icon: 'monitor',   color: '#9C6B4F' },
+  { name: 'Education',     type: 'expense', icon: 'book',      color: '#7A8B99' },
+  { name: 'Utilities',     type: 'expense', icon: 'zap',       color: '#D99A4E' },
+  { name: 'Other',         type: 'expense', icon: 'package',   color: '#998A7B' },
+];
 
-export const ALL_CATEGORIES = [...CATEGORIES.income, ...CATEGORIES.expense];
+const FALLBACK = { name: 'Other', type: 'expense', icon: 'package', color: '#998A7B' };
 
-const FALLBACK_META = { Icon: FiPackage, color: '#998A7B' };
+/** Build a name -> category lookup from a categories list. */
+export function indexByName(categories = []) {
+  const map = {};
+  for (const c of categories) map[c.name] = c;
+  return map;
+}
 
-/** Resolve a category's icon metadata (always returns something valid). */
-export const categoryMeta = (cat) => CATEGORY_META[cat] || FALLBACK_META;
+/** Resolve a category's metadata { Icon, color } from a categories list. */
+export function categoryMetaFrom(categories, name) {
+  const cat = categories.find((c) => c.name === name) || FALLBACK;
+  return { Icon: resolveIcon(cat.icon), color: cat.color };
+}
+
+/** Categories of a given type. */
+export const categoriesOfType = (categories, type) => categories.filter((c) => c.type === type);
+
+export { ICON_REGISTRY };

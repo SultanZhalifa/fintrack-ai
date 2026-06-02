@@ -1,11 +1,13 @@
-import { categoryMeta } from '../../constants/categories';
+import { useFinance } from '../../context/finance-context';
+import { categoryMetaFrom } from '../../constants/categories';
 
 /**
- * Renders a category's SVG icon inside a soft tinted chip.
- * `size` controls the chip; `bare` renders just the glyph (no chip).
+ * Renders a category's SVG icon inside a soft tinted chip, resolved against the
+ * user's (editable) category list. `bare` renders just the glyph (no chip).
  */
 export default function CategoryIcon({ category, size = 42, bare = false }) {
-  const { Icon, color } = categoryMeta(category);
+  const { categories } = useFinance();
+  const { Icon, color } = categoryMetaFrom(categories, category);
   if (bare) return <Icon size={size} color={color} aria-hidden />;
   return (
     <span

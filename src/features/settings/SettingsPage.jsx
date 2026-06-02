@@ -13,6 +13,7 @@ import { useToast } from '../../context/toast-context';
 import { useT } from '../../i18n/i18n-context';
 import { CURRENCIES } from '../../constants/config';
 import { exportBackupJSON, parseBackupJSON } from '../../lib/csv';
+import CategoriesManager from './CategoriesManager';
 
 const LANGUAGES = [{ code: 'id', label: 'Bahasa Indonesia' }, { code: 'en', label: 'English' }];
 
@@ -32,7 +33,7 @@ function Row({ icon, title, sub, children }) {
 export default function SettingsPage() {
   const route = getRoute('settings');
   const { baseCurrency, language, ratesUpdatedAt, rates, setBaseCurrency, setLanguage, refreshRates } = useSettings();
-  const { transactions, budgets, accounts, clearAll, replaceAll } = useFinance();
+  const { transactions, budgets, accounts, categories, clearAll, replaceAll } = useFinance();
   const { notify } = useToast();
   const t = useT();
   const [refreshing, setRefreshing] = useState(false);
@@ -54,7 +55,7 @@ export default function SettingsPage() {
   };
 
   const handleExport = () => {
-    exportBackupJSON({ transactions, budgets, accounts });
+    exportBackupJSON({ transactions, budgets, accounts, categories });
     notify(t('settings.exported'), 'success');
   };
 
@@ -66,7 +67,7 @@ export default function SettingsPage() {
     reader.onload = () => {
       try {
         const parsed = parseBackupJSON(reader.result);
-        replaceAll(parsed.transactions, parsed.budgets, parsed.accounts);
+        replaceAll(parsed.transactions, parsed.budgets, parsed.accounts, parsed.categories);
         notify(t('settings.imported', { count: parsed.transactions.length }), 'success');
       } catch {
         notify(t('settings.importFailed'), 'error');
@@ -113,6 +114,8 @@ export default function SettingsPage() {
           </Select>
         </Row>
       </Card>
+
+      <CategoriesManager />
 
       <Card title={t('settings.data')} subtitle={t('settings.dataSub')}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>

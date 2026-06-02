@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import Modal from '../../components/ui/Modal';
 import Button from '../../components/ui/Button';
 import { Field, Input, Select } from '../../components/ui/Field';
-import { CATEGORIES } from '../../constants/categories';
+import { categoriesOfType } from '../../constants/categories';
 import { useFinance } from '../../context/finance-context';
 import { useToast } from '../../context/toast-context';
 import { useSettings } from '../../context/settings-context';
@@ -26,7 +26,7 @@ const initialForm = (editing, baseCurrency, rates) => editing
   : { type: 'expense', amount: '', category: '', note: '', date: format(new Date(), 'yyyy-MM-dd'), accountId: '' };
 
 function TransactionForm({ editing, onClose }) {
-  const { addTransaction, updateTransaction, accounts } = useFinance();
+  const { addTransaction, updateTransaction, accounts, categories } = useFinance();
   const { notify } = useToast();
   const { baseCurrency, rates } = useSettings();
   const t = useT();
@@ -102,7 +102,7 @@ function TransactionForm({ editing, onClose }) {
           <Field label={t('tx.category')} error={errors.category}>
             <Select id="tx-category" name="category" value={form.category} onChange={update('category')} invalid={!!errors.category}>
               <option value="">{t('tx.selectCategory')}</option>
-              {CATEGORIES[form.type].map((c) => <option key={c} value={c}>{c}</option>)}
+              {categoriesOfType(categories, form.type).map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
             </Select>
           </Field>
         </div>

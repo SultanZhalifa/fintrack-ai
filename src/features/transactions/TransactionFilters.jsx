@@ -1,6 +1,6 @@
 import { FiSearch } from 'react-icons/fi';
 import { Input, Select } from '../../components/ui/Field';
-import { ALL_CATEGORIES } from '../../constants/categories';
+import { useFinance } from '../../context/finance-context';
 import { useT } from '../../i18n/i18n-context';
 
 const SORTS = [
@@ -15,6 +15,7 @@ const SORTS = [
  */
 export default function TransactionFilters({ filters, onChange }) {
   const t = useT();
+  const { categories } = useFinance();
   const set = (key) => (e) => onChange({ ...filters, [key]: e.target.value });
 
   return (
@@ -34,7 +35,7 @@ export default function TransactionFilters({ filters, onChange }) {
         </Select>
         <Select value={filters.category} onChange={set('category')} aria-label={t('tx.allCategories')}>
           <option value="all">{t('tx.allCategories')}</option>
-          {ALL_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+          {categories.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
         </Select>
         <Select value={filters.sort} onChange={set('sort')} aria-label={t('tx.sort.newest')}>
           {SORTS.map((s) => <option key={s.value} value={s.value}>{t(s.key)}</option>)}
