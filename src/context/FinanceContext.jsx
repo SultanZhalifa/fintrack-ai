@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { FinanceContext } from './finance-context';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { STORAGE_KEYS } from '../constants/config';
@@ -9,6 +9,8 @@ import {
   getMonthlyDelta, getBudgetStatus, getLargestTransaction,
 } from '../lib/finance';
 import { getAccountBalances } from '../lib/accounts';
+import { materializeRecurring, nextDueLabel } from '../lib/recurring';
+import { forecastMonth } from '../lib/forecast';
 
 // Start empty — real user data only. Existing data is read straight from storage.
 const initial = (key, fallback) => readStorage(key, fallback);
@@ -20,6 +22,7 @@ export function FinanceProvider({ children }) {
   const [accounts, setAccounts] = useLocalStorage(STORAGE_KEYS.accounts, initial(STORAGE_KEYS.accounts, []));
   // Categories default to the curated set; users edit/add/remove from there.
   const [categories, setCategories] = useLocalStorage(STORAGE_KEYS.categories, initial(STORAGE_KEYS.categories, DEFAULT_CATEGORIES));
+  const [recurrings, setRecurrings] = useLocalStorage(STORAGE_KEYS.recurrings, initial(STORAGE_KEYS.recurrings, []));
 
   // ---- Transaction CRUD ----
   const addTransaction = useCallback((tx) => {
@@ -87,19 +90,21 @@ export function FinanceProvider({ children }) {
   }, [setAccounts, setTransactions]);
 
   // ---- Bulk data ops ----
-  const replaceAll = useCallback((nextTxs, nextBudgets, nextAccounts, nextCategories) => {
+  const replaceAll = useCallback((nextTxs, nextBudgets, nextAccounts, nextCategories, nextRecurrings) => {
     setTransactions(Array.isArray(nextTxs) ? nextTxs : []);
     if (nextBudgets) setBudgets(nextBudgets);
     if (nextAccounts) setAccounts(Array.isArray(nextAccounts) ? nextAccounts : []);
     if (Array.isArray(nextCategories) && nextCategories.length) setCategories(nextCategories);
-  }, [setTransactions, setBudgets, setAccounts, setCategories]);
+    if (Array.isArray(nextRecurrings)) setRecurrings(nextRecurrings);
+  }, [setTransactions, setBudgets, setAccounts, setCategories, setRecurrings]);
 
   const clearAll = useCallback(() => {
     setTransactions([]);
     setBudgets({});
     setAccounts([]);
     setCategories(DEFAULT_CATEGORIES);
-  }, [setTransactions, setBudgets, setAccounts, setCategories]);
+    setRecurrings([]);
+  }, [setTransactions, setBudgets, setAccounts, setCategories, setRecurrings]);
 
   // ---- Budget CRUD ----
   const setBudget = useCallback((category, amount) => {
@@ -131,9 +136,49 @@ export function FinanceProvider({ children }) {
     setCategories((prev) => prev.filter((c) => c.name !== name));
   }, [setCategories]);
 
+  // ---- Recurring CRUD ----
+  const addRecurring = useCallback((rule) => {
+    const newRule = {
+      id: genId(),
+      type: rule.type || 'expense',
+      amount: Math.abs(Number(rule.amount)) || 0,
+      category: rule.category,
+      note: rule.note || '',
+      accountId: rule.accountId || undefined,
+      frequency: rule.frequency || 'monthly',
+      startDate: rule.startDate,
+      lastRun: null,
+      createdAt: new Date().toISOString(),
+    };
+    setRecurrings((prev) => [...prev, newRule]);
+    return newRule;
+  }, [setRecurrings]);
+
+  const updateRecurring = useCallback((id, patch) => {
+    setRecurrings((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+  }, [setRecurrings]);
+
+  const removeRecurring = useCallback((id) => {
+    setRecurrings((prev) => prev.filter((r) => r.id !== id));
+  }, [setRecurrings]);
+
+  // Auto-post any recurring occurrences that are due (run once per app load).
+  const materializedRef = useRef(false);
+  useEffect(() => {
+    if (materializedRef.current) return;
+    materializedRef.current = true;
+    const { newTransactions, updatedRules } = materializeRecurring(recurrings, new Date(), genId);
+    if (newTransactions.length > 0) {
+      setTransactions((prev) => [...newTransactions, ...prev]);
+      setRecurrings(updatedRules);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---- Derived selectors (memoized) ----
   const derived = useMemo(() => {
     const { balances, netWorth } = getAccountBalances(accounts, transactions);
+    const now = new Date();
     return {
       summary: getSummary(transactions),
       savingsRate: getSavingsRate(transactions),
@@ -144,21 +189,25 @@ export function FinanceProvider({ children }) {
       largest: getLargestTransaction(transactions),
       accountBalances: balances,
       netWorth,
+      forecast: forecastMonth(transactions, recurrings, now),
+      recurringsDetailed: recurrings.map((r) => ({ ...r, nextDue: nextDueLabel(r, now) })),
     };
-  }, [transactions, budgets, accounts]);
+  }, [transactions, budgets, accounts, recurrings]);
 
   const value = useMemo(() => ({
-    transactions, budgets, accounts, categories,
+    transactions, budgets, accounts, categories, recurrings,
     addTransaction, updateTransaction, deleteTransaction,
     addTransfer, addAccount, updateAccount, deleteAccount,
     addCategory, updateCategory, removeCategory,
+    addRecurring, updateRecurring, removeRecurring,
     replaceAll, clearAll, setBudget, removeBudget,
     ...derived,
   }), [
-    transactions, budgets, accounts, categories,
+    transactions, budgets, accounts, categories, recurrings,
     addTransaction, updateTransaction, deleteTransaction,
     addTransfer, addAccount, updateAccount, deleteAccount,
     addCategory, updateCategory, removeCategory,
+    addRecurring, updateRecurring, removeRecurring,
     replaceAll, clearAll, setBudget, removeBudget, derived,
   ]);
 

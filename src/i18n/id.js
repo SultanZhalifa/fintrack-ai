@@ -9,6 +9,7 @@ export default {
   'nav.analytics': 'Analitik',
   'nav.budgets': 'Anggaran',
   'nav.accounts': 'Akun',
+  'nav.recurring': 'Berulang',
   'nav.insights': 'Wawasan AI',
   'nav.settings': 'Pengaturan',
 
@@ -20,6 +21,36 @@ export default {
   'page.insights.sub': 'Saran keuangan personal bertenaga AI.',
   'page.settings.sub': 'Mata uang, bahasa, dan datamu.',
   'page.accounts.sub': 'Pantau saldo di tunai, bank, dan e-wallet.',
+  'page.recurring.sub': 'Otomatiskan gaji, langganan, dan tagihan.',
+
+  // Berulang
+  'recurring.add': 'Tambah Berulang',
+  'recurring.edit': 'Ubah Berulang',
+  'recurring.frequency': 'Frekuensi',
+  'recurring.freq.daily': 'Harian',
+  'recurring.freq.weekly': 'Mingguan',
+  'recurring.freq.monthly': 'Bulanan',
+  'recurring.freq.yearly': 'Tahunan',
+  'recurring.startDate': 'Tanggal mulai',
+  'recurring.nextDue': 'Berikutnya: {date}',
+  'recurring.none': 'Belum ada item berulang',
+  'recurring.noneSub': 'Tambahkan gaji, sewa, atau langganan agar tercatat otomatis.',
+  'recurring.addFirst': 'Tambah item berulang pertamamu',
+  'recurring.added': 'Item berulang ditambahkan',
+  'recurring.updated': 'Item berulang diperbarui',
+  'recurring.removed': 'Item berulang dihapus',
+  'recurring.removeTitle': 'Hapus item berulang?',
+  'recurring.removeConfirm': '"{name}" akan berhenti tercatat otomatis. Entri lama tetap ada.',
+  'recurring.autoPosted': '{count} transaksi berulang dicatat',
+
+  // Proyeksi
+  'forecast.title': 'Proyeksi Akhir Bulan',
+  'forecast.sub': 'Perkiraan bersih bulan ini',
+  'forecast.actual': 'Sejauh ini bulan ini',
+  'forecast.scheduled': 'Terjadwal (berulang)',
+  'forecast.estimated': 'Perkiraan pengeluaran',
+  'forecast.projected': 'Proyeksi bersih',
+  'forecast.daysLeft': '{days} hari tersisa',
 
   // Akun
   'account.add': 'Tambah Akun',

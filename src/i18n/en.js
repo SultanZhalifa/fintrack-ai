@@ -9,6 +9,7 @@ export default {
   'nav.analytics': 'Analytics',
   'nav.budgets': 'Budgets',
   'nav.accounts': 'Accounts',
+  'nav.recurring': 'Recurring',
   'nav.insights': 'AI Insights',
   'nav.settings': 'Settings',
 
@@ -20,6 +21,36 @@ export default {
   'page.insights.sub': 'Personalized, AI-powered financial advice.',
   'page.settings.sub': 'Currency, language, and your data.',
   'page.accounts.sub': 'Track balances across cash, bank, and e-wallets.',
+  'page.recurring.sub': 'Automate salaries, subscriptions, and bills.',
+
+  // Recurring
+  'recurring.add': 'Add Recurring',
+  'recurring.edit': 'Edit Recurring',
+  'recurring.frequency': 'Frequency',
+  'recurring.freq.daily': 'Daily',
+  'recurring.freq.weekly': 'Weekly',
+  'recurring.freq.monthly': 'Monthly',
+  'recurring.freq.yearly': 'Yearly',
+  'recurring.startDate': 'Start date',
+  'recurring.nextDue': 'Next: {date}',
+  'recurring.none': 'No recurring items',
+  'recurring.noneSub': 'Add salaries, rent, or subscriptions to post them automatically.',
+  'recurring.addFirst': 'Add your first recurring item',
+  'recurring.added': 'Recurring item added',
+  'recurring.updated': 'Recurring item updated',
+  'recurring.removed': 'Recurring item removed',
+  'recurring.removeTitle': 'Remove recurring item?',
+  'recurring.removeConfirm': '"{name}" will stop posting automatically. Past entries are kept.',
+  'recurring.autoPosted': '{count} recurring transaction(s) posted',
+
+  // Forecast
+  'forecast.title': 'Month-End Forecast',
+  'forecast.sub': 'Projected net for this month',
+  'forecast.actual': 'So far this month',
+  'forecast.scheduled': 'Scheduled (recurring)',
+  'forecast.estimated': 'Estimated spending',
+  'forecast.projected': 'Projected net',
+  'forecast.daysLeft': '{days} days left',
 
   // Accounts
   'account.add': 'Add Account',
