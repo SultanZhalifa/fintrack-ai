@@ -196,6 +196,39 @@ export default {
   'smart.remaining': 'Remaining this month',
   'smart.noBudgets': 'Set budgets to unlock safe-to-spend guidance.',
 
+  // Health score
+  'health.title': 'Financial Health',
+  'health.sub': 'A 0-100 score from your real data',
+  'health.grade.excellent': 'Excellent',
+  'health.grade.good': 'Good',
+  'health.grade.fair': 'Fair',
+  'health.grade.poor': 'Needs work',
+  'health.needData': 'Add income and expenses to calculate your score.',
+  'health.pillar.savings': 'Savings rate',
+  'health.pillar.budget': 'Budget adherence',
+  'health.pillar.stability': 'Expense stability',
+  'health.pillar.buffer': 'Emergency buffer',
+
+  // Rule-based insight cards
+  'insight.title': 'Smart Insights',
+  'insight.sub': 'Automatic observations from your activity',
+  'insight.none': 'No notable patterns yet — keep tracking.',
+  'insight.spike': '{category} spending is up {pct}% this month ({amount}).',
+  'insight.drop': '{category} spending is down {pct}% this month. Nice.',
+  'insight.over': 'You are over budget on {category} by {amount}.',
+  'insight.saveGood': 'Strong month — you saved {pct}% of income.',
+  'insight.saveNeg': 'You spent more than you earned this period.',
+  'insight.saveLow': 'Savings rate is {pct}%. Aim for at least 10%.',
+  'insight.concentration': '{category} is {pct}% of this month’s spending.',
+
+  // Command palette
+  'cmd.placeholder': 'Search actions and pages…',
+  'cmd.addTransaction': 'Add transaction',
+  'cmd.goTo': 'Go to {page}',
+  'cmd.refreshRates': 'Refresh exchange rates',
+  'cmd.empty': 'No results',
+  'cmd.hint': 'Ctrl/Cmd + K',
+
   // AI Insights
   'ai.title': 'AI Spending Insights',
   'ai.poweredBy': 'Powered by Gemini',
