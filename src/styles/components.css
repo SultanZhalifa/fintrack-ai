@@ -358,6 +358,35 @@
 .toast.info { border-left-color: var(--info); }
 .toast-icon { display: flex; flex-shrink: 0; }
 
+/* ---------- Onboarding ---------- */
+.onboard-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  display: grid; place-items: center; padding: 20px;
+  background: radial-gradient(circle at 30% 20%, #FBEFE4, var(--bg));
+}
+.onboard-card {
+  width: 100%; max-width: 440px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-lg);
+  padding: 28px;
+}
+.onboard-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.onboard-step-label { font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin-bottom: 16px; }
+.onboard-icon {
+  width: 48px; height: 48px; border-radius: 14px; margin-bottom: 14px;
+  display: grid; place-items: center; color: var(--accent); background: var(--accent-soft);
+}
+.onboard-title { font-family: var(--font-d); font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; }
+.onboard-choice {
+  padding: 13px 16px; border-radius: var(--r-sm); cursor: pointer;
+  border: 1px solid var(--border-2); background: var(--surface-2);
+  font-family: var(--font); font-size: 0.92rem; font-weight: 500; color: var(--text-1);
+  text-align: left; transition: all var(--dur);
+}
+.onboard-choice:hover { border-color: var(--border-strong); }
+.onboard-choice.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-700); font-weight: 600; }
+.onboard-privacy { display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: var(--text-3); margin: 20px 0; }
+
 /* ---------- Command palette ---------- */
 .cmd-palette {
   width: 100%; max-width: 560px;
