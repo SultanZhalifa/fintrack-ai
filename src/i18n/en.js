@@ -127,6 +127,8 @@ export default {
   'tx.sort.oldest': 'Oldest first',
   'tx.sort.highest': 'Highest amount',
   'tx.sort.lowest': 'Lowest amount',
+  'tx.fromDate': 'From date',
+  'tx.toDate': 'To date',
   'tx.shownOf': '{shown} of {total} shown',
   'tx.net': 'Net',
   'tx.recent': 'Recent Transactions',

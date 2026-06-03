@@ -3,8 +3,10 @@ import { useT } from '../../i18n/i18n-context';
 
 /**
  * Shared navigation list used by both the desktop sidebar and mobile drawer.
+ * `idPrefix` keeps element ids unique across the two instances (valid HTML);
+ * the desktop sidebar keeps the canonical `nav-<id>` ids.
  */
-export default function NavList({ current, onNavigate }) {
+export default function NavList({ current, onNavigate, idPrefix = '' }) {
   const t = useT();
   return (
     <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -12,7 +14,7 @@ export default function NavList({ current, onNavigate }) {
       {ROUTES.map(({ id, labelKey, icon: Icon }) => (
         <button
           key={id}
-          id={`nav-${id}`}
+          id={`${idPrefix}nav-${id}`}
           className={`nav-item ${current === id ? 'active' : ''}`}
           onClick={() => onNavigate(id)}
           aria-current={current === id ? 'page' : undefined}
