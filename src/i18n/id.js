@@ -127,6 +127,8 @@ export default {
   'tx.sort.oldest': 'Terlama dulu',
   'tx.sort.highest': 'Jumlah terbesar',
   'tx.sort.lowest': 'Jumlah terkecil',
+  'tx.fromDate': 'Dari tanggal',
+  'tx.toDate': 'Sampai tanggal',
   'tx.shownOf': '{shown} dari {total} ditampilkan',
   'tx.net': 'Bersih',
   'tx.recent': 'Transaksi Terbaru',

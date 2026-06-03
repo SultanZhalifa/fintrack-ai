@@ -1,5 +1,5 @@
 import { FiSearch } from 'react-icons/fi';
-import { Input, Select } from '../../components/ui/Field';
+import { Field, Input, Select } from '../../components/ui/Field';
 import { useFinance } from '../../context/finance-context';
 import { useT } from '../../i18n/i18n-context';
 
@@ -40,8 +40,12 @@ export default function TransactionFilters({ filters, onChange }) {
         <Select value={filters.sort} onChange={set('sort')} aria-label={t('tx.sort.newest')}>
           {SORTS.map((s) => <option key={s.value} value={s.value}>{t(s.key)}</option>)}
         </Select>
-        <Input type="date" value={filters.from} onChange={set('from')} aria-label={t('tx.date')} title={t('tx.date')} />
-        <Input type="date" value={filters.to} onChange={set('to')} aria-label={t('tx.date')} title={t('tx.date')} />
+        <Field label={t('tx.fromDate')}>
+          <Input type="date" value={filters.from} onChange={set('from')} aria-label={t('tx.fromDate')} />
+        </Field>
+        <Field label={t('tx.toDate')}>
+          <Input type="date" value={filters.to} onChange={set('to')} aria-label={t('tx.toDate')} />
+        </Field>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ export default function MobileNav({ current, onNavigate, open, setOpen }) {
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <Brand />
-              <NavList current={current} onNavigate={handleNavigate} />
+              <NavList current={current} onNavigate={handleNavigate} idPrefix="drawer-" />
             </motion.aside>
           </>
         )}

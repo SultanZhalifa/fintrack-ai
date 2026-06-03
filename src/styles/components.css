@@ -438,11 +438,13 @@
 @media (max-width: 768px) {
   .sidebar { display: none; }
   .topbar { display: flex; }
-  .main-content { padding: 18px 16px 48px; }
+  /* Generous bottom padding + safe-area so the last card/empty-state is never
+     clipped behind the mobile browser toolbar. */
+  .main-content { padding: 18px 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
   .page-header { margin-bottom: 18px; }
   .page-title { font-size: 1.35rem; }
   .form-grid { grid-template-columns: 1fr; }
-  .toast-wrap { bottom: 14px; right: 14px; left: 14px; }
+  .toast-wrap { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: 14px; left: 14px; }
   .toast { min-width: 0; }
 }
 
