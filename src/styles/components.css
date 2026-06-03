@@ -308,7 +308,10 @@
 }
 .tx-info { flex: 1; min-width: 0; }
 .tx-name { font-size: 0.9rem; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tx-meta { font-size: 0.76rem; color: var(--text-3); margin-top: 2px; }
+.tx-meta { font-size: 0.76rem; color: var(--text-3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Keep inline glyphs (e.g. the recurring repeat icon) on the same line as the
+   meta text — the global `svg { display: block }` would otherwise break it. */
+.tx-meta svg { display: inline-block; vertical-align: middle; }
 .tx-amount { font-family: var(--font-d); font-weight: 700; font-size: 0.95rem; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 .tx-actions { display: flex; gap: 2px; flex-shrink: 0; }
 
@@ -446,10 +449,24 @@
   .form-grid { grid-template-columns: 1fr; }
   .toast-wrap { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: 14px; left: 14px; }
   .toast { min-width: 0; }
+
+  /* Transaction / recurring rows: reclaim horizontal space so the note,
+     amount, and actions all stay on one line instead of wrapping. */
+  .tx-row { gap: 10px; padding: 12px 4px; }
+  .tx-row .cat-icon { width: 38px !important; height: 38px !important; }
+  .tx-amount { font-size: 0.875rem; }
+  .tx-actions .icon-btn { width: 32px; height: 32px; }
 }
 
 @media (max-width: 480px) {
   .stat-grid { grid-template-columns: 1fr; }
   .page-actions { width: 100%; }
   .page-actions .btn { flex: 1; }
+
+  /* Tighten rows further on very small phones so the note keeps some room
+     next to wide currency amounts (e.g. "+Rp 7.500.000"). */
+  .tx-row { gap: 8px; }
+  .tx-row .cat-icon { width: 34px !important; height: 34px !important; }
+  .tx-amount { font-size: 0.82rem; }
+  .tx-actions .icon-btn { width: 30px; height: 30px; }
 }
