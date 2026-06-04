@@ -361,6 +361,15 @@
 .toast.info { border-left-color: var(--info); }
 .toast-icon { display: flex; flex-shrink: 0; }
 
+/* ---------- Scan hint (prefilled-from-receipt banner) ---------- */
+.scan-hint {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; margin-bottom: 18px;
+  border-radius: var(--r-sm);
+  background: var(--accent-soft); color: var(--accent-700);
+  font-size: 0.82rem; font-weight: 500;
+}
+
 /* ---------- Onboarding ---------- */
 .onboard-overlay {
   position: fixed; inset: 0; z-index: 1100;

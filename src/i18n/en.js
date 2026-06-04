@@ -145,6 +145,18 @@ export default {
   'tx.emptyFilter': 'No transactions match your filters.',
   'tx.emptyHere': 'Nothing here',
 
+  // Receipt scanning
+  'receipt.scan': 'Scan Receipt',
+  'receipt.reading': 'Reading receipt…',
+  'receipt.readingCloud': 'Reading with AI…',
+  'receipt.readingDevice': 'Reading on device…',
+  'receipt.successCloud': 'Receipt read — please review',
+  'receipt.successDevice': 'Read on device — please review the result',
+  'receipt.failed': "Couldn't read the receipt. Enter it manually.",
+  'receipt.privacyCloud': 'The photo is sent to Google (Gemini) to read it.',
+  'receipt.privacyDevice': 'The photo is read on your device and never uploaded.',
+  'receipt.reviewHint': 'Detected from your receipt — check and edit before saving.',
+
   // Charts
   'chart.monthly': 'Monthly Overview',
   'chart.last6': 'Last 6 months',
