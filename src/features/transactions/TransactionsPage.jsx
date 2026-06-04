@@ -14,6 +14,7 @@ import { exportTransactionsCSV, parseBackupJSON } from '../../lib/csv';
 import TransactionFilters from './TransactionFilters';
 import TransactionList from './TransactionList';
 import AddTransactionButton from './AddTransactionButton';
+import ReceiptScanButton from './ReceiptScanButton';
 
 const DEFAULT_FILTERS = { query: '', type: 'all', category: 'all', from: '', to: '', sort: 'date-desc' };
 
@@ -62,6 +63,7 @@ export default function TransactionsPage() {
       <Button variant="secondary" size="sm" onClick={handleExport}>
         <FiDownload size={15} /> {t('action.export')}
       </Button>
+      <ReceiptScanButton />
       <AddTransactionButton />
     </>
   );

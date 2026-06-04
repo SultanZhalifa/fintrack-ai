@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
+import { FiCamera } from 'react-icons/fi';
 import Modal from '../../components/ui/Modal';
 import Button from '../../components/ui/Button';
 import { Field, Input, Select } from '../../components/ui/Field';
@@ -10,27 +11,34 @@ import { useSettings } from '../../context/settings-context';
 import { useT } from '../../i18n/i18n-context';
 import { convertToBase, convertFromBase, currencyMeta } from '../../lib/currency';
 
+const blankForm = () => ({ type: 'expense', amount: '', category: '', note: '', date: format(new Date(), 'yyyy-MM-dd'), accountId: '' });
+
 /**
  * Initial form values. `amount` is shown in the user's display currency, so an
  * existing transaction (stored in IDR base) is converted up for editing.
+ * `prefill` (e.g. from a scanned receipt) seeds a new-transaction form; its
+ * fields override the blanks so the user can review/edit before saving.
  */
-const initialForm = (editing, baseCurrency, rates) => editing
-  ? {
+const initialForm = (editing, prefill, baseCurrency, rates) => {
+  if (editing) {
+    return {
       type: editing.type,
       amount: String(Math.round(convertFromBase(editing.amount, baseCurrency, rates) * 100) / 100),
       category: editing.category,
       note: editing.note || '',
       date: editing.date,
       accountId: editing.accountId || '',
-    }
-  : { type: 'expense', amount: '', category: '', note: '', date: format(new Date(), 'yyyy-MM-dd'), accountId: '' };
+    };
+  }
+  return { ...blankForm(), ...(prefill || {}) };
+};
 
-function TransactionForm({ editing, onClose }) {
+function TransactionForm({ editing, prefill, onClose }) {
   const { addTransaction, updateTransaction, accounts, categories } = useFinance();
   const { notify } = useToast();
   const { baseCurrency, rates } = useSettings();
   const t = useT();
-  const [form, setForm] = useState(() => initialForm(editing, baseCurrency, rates));
+  const [form, setForm] = useState(() => initialForm(editing, prefill, baseCurrency, rates));
   const [errors, setErrors] = useState({});
 
   const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -68,9 +76,15 @@ function TransactionForm({ editing, onClose }) {
   };
 
   const symbol = currencyMeta(baseCurrency).symbol;
+  const fromScan = !!prefill && !!prefill.key && prefill.key.startsWith('scan-') && !prefill.key.startsWith('scan-fail');
 
   return (
     <>
+      {fromScan && (
+        <div className="scan-hint">
+          <FiCamera size={14} /> {t('receipt.reviewHint')}
+        </div>
+      )}
       <div className="segment" style={{ width: '100%', marginBottom: 20 }}>
         {['expense', 'income'].map((type) => (
           <button
@@ -134,13 +148,21 @@ function TransactionForm({ editing, onClose }) {
 }
 
 /**
- * TransactionModal — create or edit a transaction. Pass `editing` (a tx) to edit.
+ * TransactionModal — create or edit a transaction. Pass `editing` (a tx) to edit,
+ * or `prefill` (partial form values, e.g. from a scanned receipt) to seed a new one.
  */
-export default function TransactionModal({ open, onClose, editing }) {
+export default function TransactionModal({ open, onClose, editing, prefill }) {
   const t = useT();
   return (
     <Modal open={open} onClose={onClose} title={editing ? t('tx.edit') : t('tx.add')}>
-      {open && <TransactionForm key={editing?.id ?? 'new'} editing={editing} onClose={onClose} />}
+      {open && (
+        <TransactionForm
+          key={editing?.id ?? prefill?.key ?? 'new'}
+          editing={editing}
+          prefill={prefill}
+          onClose={onClose}
+        />
+      )}
     </Modal>
   );
 }

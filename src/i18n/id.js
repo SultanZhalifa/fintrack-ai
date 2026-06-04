@@ -145,6 +145,18 @@ export default {
   'tx.emptyFilter': 'Tidak ada transaksi yang cocok dengan filter.',
   'tx.emptyHere': 'Belum ada apa-apa',
 
+  // Pindai struk
+  'receipt.scan': 'Scan Struk',
+  'receipt.reading': 'Membaca struk…',
+  'receipt.readingCloud': 'Membaca dengan AI…',
+  'receipt.readingDevice': 'Membaca di perangkat…',
+  'receipt.successCloud': 'Struk terbaca — silakan periksa',
+  'receipt.successDevice': 'Terbaca di perangkat — periksa hasilnya',
+  'receipt.failed': 'Tidak bisa membaca struk. Isi manual saja.',
+  'receipt.privacyCloud': 'Foto dikirim ke Google (Gemini) untuk dibaca.',
+  'receipt.privacyDevice': 'Foto dibaca di perangkatmu dan tidak diunggah.',
+  'receipt.reviewHint': 'Terdeteksi dari strukmu — periksa dan edit sebelum simpan.',
+
   // Grafik
   'chart.monthly': 'Ringkasan Bulanan',
   'chart.last6': '6 bulan terakhir',
