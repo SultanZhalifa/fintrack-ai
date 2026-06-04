@@ -12,6 +12,7 @@ const SORTS = [
 
 /**
  * Filter bar for the Transactions page. Controlled via `filters` + `onChange`.
+ * Laid out in clear rows so labeled and unlabeled controls never misalign.
  */
 export default function TransactionFilters({ filters, onChange }) {
   const t = useT();
@@ -19,7 +20,7 @@ export default function TransactionFilters({ filters, onChange }) {
   const set = (key) => (e) => onChange({ ...filters, [key]: e.target.value });
 
   return (
-    <div className="card" style={{ marginBottom: 16, display: 'grid', gap: 12 }}>
+    <div className="card filters-card" style={{ marginBottom: 16 }}>
       <Input
         icon={<FiSearch size={16} />}
         placeholder={t('tx.search')}
@@ -27,7 +28,9 @@ export default function TransactionFilters({ filters, onChange }) {
         onChange={set('query')}
         aria-label={t('tx.search')}
       />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>
+
+      {/* Row 1: self-describing selects (no labels) */}
+      <div className="filters-row">
         <Select value={filters.type} onChange={set('type')} aria-label={t('tx.allTypes')}>
           <option value="all">{t('tx.allTypes')}</option>
           <option value="income">{t('chart.income')}</option>
@@ -40,6 +43,10 @@ export default function TransactionFilters({ filters, onChange }) {
         <Select value={filters.sort} onChange={set('sort')} aria-label={t('tx.sort.newest')}>
           {SORTS.map((s) => <option key={s.value} value={s.value}>{t(s.key)}</option>)}
         </Select>
+      </div>
+
+      {/* Row 2: labeled date range, kept together and aligned */}
+      <div className="filters-row filters-row-dates">
         <Field label={t('tx.fromDate')}>
           <Input type="date" value={filters.from} onChange={set('from')} aria-label={t('tx.fromDate')} />
         </Field>
