@@ -261,7 +261,37 @@
 .field-error { font-size: 0.74rem; color: var(--expense); }
 .input.invalid, .select.invalid { border-color: var(--expense); }
 
+/* Native date/number inputs: consistent height + left-aligned value (fixes the
+   iOS Safari "centered text + empty right gap" look). */
+.input[type="date"],
+.input[type="number"] {
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+  min-height: 44px;
+}
+.input[type="date"] { position: relative; display: block; }
+.input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
+.input[type="date"]::-webkit-calendar-picker-indicator {
+  margin-left: auto;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.input[type="date"]::-webkit-datetime-edit { padding: 0; }
+
+/* The Select chevron column needs a touch more right padding for symmetry. */
+.select { padding-right: 34px; min-height: 44px; }
+
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ---------- Transaction filters ---------- */
+.filters-card { display: grid; gap: 12px; }
+.filters-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: end; }
+.filters-row-dates { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 620px) {
+  .filters-row { grid-template-columns: 1fr 1fr; }
+  .filters-row-dates { grid-template-columns: 1fr 1fr; }
+}
 
 /* ---------- Modal ---------- */
 .modal-overlay {
@@ -467,10 +497,16 @@
   .tx-actions .icon-btn { width: 32px; height: 32px; }
 }
 
+@media (max-width: 600px) {
+  /* Header actions: secondary buttons share an even row; the primary
+     "add" button spans the full width on its own line for a clean layout. */
+  .page-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+  .page-actions .btn-secondary { flex: 1 1 0; min-width: 0; }
+  .page-actions .btn-primary { flex: 1 1 100%; justify-content: center; }
+}
+
 @media (max-width: 480px) {
   .stat-grid { grid-template-columns: 1fr; }
-  .page-actions { width: 100%; }
-  .page-actions .btn { flex: 1; }
 
   /* Tighten rows further on very small phones so the note keeps some room
      next to wide currency amounts (e.g. "+Rp 7.500.000"). */
