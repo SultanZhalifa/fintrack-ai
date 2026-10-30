@@ -9,7 +9,7 @@ import { useFinance } from '../../context/finance-context';
 import { useToast } from '../../context/toast-context';
 import { useFormat } from '../../hooks/useFormat';
 import { useI18n } from '../../i18n/i18n-context';
-import { askGemini, buildInsightPrompt, isAIEnabled } from '../../lib/gemini';
+import { askInsights, useAIEnabled } from '../../lib/gemini';
 
 export default function AIInsights() {
   const { summary, savingsRate, breakdown, transactions } = useFinance();
@@ -18,19 +18,19 @@ export default function AIInsights() {
   const { t, language } = useI18n();
   const [loading, setLoading] = useState(false);
   const [insight, setInsight] = useState('');
+  const isAIEnabled = useAIEnabled();
 
   const handleAnalyze = async () => {
     setLoading(true);
     setInsight('');
     try {
-      const prompt = buildInsightPrompt({
+      const result = await askInsights({
         income: summary.income,
         expense: summary.expense,
         balance: summary.balance,
         savingsRate,
         breakdown,
       }, fmt.money, language);
-      const result = await askGemini(prompt);
       setInsight(result);
     } catch {
       notify(t('ai.failed'), 'error');

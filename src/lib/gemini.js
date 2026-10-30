@@ -1,46 +1,62 @@
 /**
- * Gemini AI client for spending insights. Real analysis only — when no API key
- * is configured the UI prompts the user to add one; we never show fake sample
- * text. Set VITE_GEMINI_KEY in .env.local to enable.
+ * Gemini AI client for spending insights. Calls go through the /api/gemini
+ * server function, which holds the API key (GEMINI_API_KEY); the key is never
+ * shipped to the browser. Real analysis only — when the server has no key the
+ * UI says so; we never show fake sample text.
  */
-const GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY || '';
-const MODEL_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
+import { useEffect, useState } from 'react';
 
-export const isAIEnabled = Boolean(GEMINI_KEY);
+const ENDPOINT = '/api/gemini';
 
-/**
- * Build the analysis prompt from computed financials.
- * @param {Function} money formatter mapping an IDR-base amount to a display string
- */
-export function buildInsightPrompt({ income, expense, balance, savingsRate, breakdown }, money, language = 'en') {
-  const langLine = language === 'id'
-    ? 'Respond in Indonesian (Bahasa Indonesia).'
-    : 'Respond in English.';
-  return `You are a personal finance advisor. Analyze this data and give 5 concise, actionable insights in plain text (no markdown, numbered 1-5). ${langLine}
-
-Financial Summary:
-- Total Income: ${money(income)}
-- Total Expenses: ${money(expense)}
-- Balance: ${money(balance)}
-- Savings Rate: ${savingsRate.toFixed(1)}%
-
-Expense Breakdown:
-${breakdown.map((b) => `- ${b.cat}: ${money(b.total)}`).join('\n')}
-
-Make the advice realistic, specific, and encouraging. Keep each point to 1-2 sentences.`;
+let statusPromise;
+/** Resolves to true when the server has a Gemini key configured. Cached. */
+export function getAIEnabled() {
+  statusPromise ??= fetch(ENDPOINT)
+    .then((r) => (r.ok ? r.json() : { enabled: false }))
+    .then((j) => j.enabled === true)
+    .catch(() => false);
+  return statusPromise;
 }
 
-/** Ask Gemini. Throws if no key is configured or the request fails. */
-export async function askGemini(prompt) {
-  if (!GEMINI_KEY) throw new Error('NO_API_KEY');
-  const res = await fetch(MODEL_URL, {
+/** React hook form of getAIEnabled(); false until the status request resolves. */
+export function useAIEnabled() {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    let live = true;
+    getAIEnabled().then((v) => live && setEnabled(v));
+    return () => { live = false; };
+  }, []);
+  return enabled;
+}
+
+/** POST a task to the server function and return the model's text. */
+export async function callGemini(body) {
+  const res = await fetch(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error(`Gemini request failed (${res.status})`);
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Empty response from Gemini');
-  return text;
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Gemini request failed (${res.status})`);
+  if (!data.text) throw new Error('Empty response from Gemini');
+  return data.text;
+}
+
+/**
+ * Ask for spending insights. Amounts are formatted on the client (display
+ * currency); the server builds the prompt.
+ * @param {Function} money formatter mapping an IDR-base amount to a display string
+ */
+export function askInsights({ income, expense, balance, savingsRate, breakdown }, money, language = 'en') {
+  return callGemini({
+    task: 'insight',
+    summary: {
+      income: money(income),
+      expense: money(expense),
+      balance: money(balance),
+      savingsRate,
+      breakdown: breakdown.map((b) => ({ cat: b.cat, total: money(b.total) })),
+      language,
+    },
+  });
 }

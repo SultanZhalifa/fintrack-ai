@@ -85,10 +85,10 @@ npm run lint      # lint the project
 
 ## Enable AI insights (optional)
 
-Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com), then create `.env.local`:
+Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com) and set it as `GEMINI_API_KEY` in the Vercel project's environment variables. The browser calls `/api/gemini` (a Vercel Function in `api/`), which holds the key, builds the prompt and rate-limits per IP, so the key is never in the client bundle. Locally, put the key in `.env.local` and run `npx vercel dev` instead of `npm run dev` (plain Vite doesn't serve `api/`).
 
 ```bash
-VITE_GEMINI_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 Without a key, AI insights are disabled and the app tells you so — it never shows fabricated advice. All other features (including the offline rule-based insights and health score) work without any key.

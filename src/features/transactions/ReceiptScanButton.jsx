@@ -7,19 +7,20 @@ import { useToast } from '../../context/toast-context';
 import { useSettings } from '../../context/settings-context';
 import { useT } from '../../i18n/i18n-context';
 import { categoriesOfType } from '../../constants/categories';
-import { scanReceipt, hasCloudEngine, ENGINE } from '../../lib/receipt';
+import { scanReceipt, useCloudEngine, ENGINE } from '../../lib/receipt';
 import { convertFromBase } from '../../lib/currency';
 
 /**
  * Scan a receipt photo → detect fields → open the Add Transaction modal
- * pre-filled for the user to review and save. Uses Gemini Vision when a key is
- * set, otherwise on-device OCR. The image is never persisted.
+ * pre-filled for the user to review and save. Uses Gemini Vision when the server
+ * has a key, otherwise on-device OCR. The image is never persisted.
  */
 export default function ReceiptScanButton() {
   const { categories } = useFinance();
   const { notify } = useToast();
   const { baseCurrency, rates } = useSettings();
   const t = useT();
+  const hasCloudEngine = useCloudEngine();
   const fileRef = useRef(null);
   const [busy, setBusy] = useState(false);
   const [prefill, setPrefill] = useState(null);

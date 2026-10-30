@@ -261,7 +261,7 @@ export default {
   'ai.getAdvice': 'Get personalized advice',
   'ai.getAdviceSub': 'Run an analysis to receive tailored, actionable tips based on your spending.',
   'ai.needKeyTitle': 'Connect Gemini to enable AI',
-  'ai.needKeySub': 'Add a free VITE_GEMINI_KEY to your .env.local to get real, personalized analysis. No fake sample text is shown.',
+  'ai.needKeySub': 'Set GEMINI_API_KEY on the server (Vercel environment variables) to get real, personalized analysis. No fake sample text is shown.',
   'ai.analyzing': 'Analyzing…',
   'ai.crunching': 'Crunching your numbers…',
   'ai.failed': 'Could not generate insights',

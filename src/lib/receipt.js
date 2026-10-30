@@ -1,9 +1,10 @@
 /**
  * Receipt-scan orchestrator. Resizes the photo, runs the best available engine
- * (Gemini Vision when a key is set, else on-device Tesseract), and returns a
+ * (Gemini Vision when the server has a key, else on-device Tesseract), and returns a
  * normalized result for the review form. Never fabricates values.
  */
-import { isVisionEnabled, extractReceiptWithGemini } from './receiptGemini';
+import { extractReceiptWithGemini } from './receiptGemini';
+import { getAIEnabled } from './gemini';
 import { extractReceiptWithOcr } from './receiptOcr';
 
 export const ENGINE = {
@@ -11,8 +12,7 @@ export const ENGINE = {
   ocr: 'ocr',
 };
 
-/** True when the accurate cloud engine is available. */
-export const hasCloudEngine = isVisionEnabled;
+export { useAIEnabled as useCloudEngine } from './gemini';
 
 /**
  * Downscale an image File to a JPEG data URL (max edge `maxSize`) to keep
@@ -50,7 +50,7 @@ export function fileToScaledDataUrl(file, maxSize = 1600, quality = 0.85) {
 export async function scanReceipt(file, categoryNames = []) {
   const dataUrl = await fileToScaledDataUrl(file);
 
-  if (isVisionEnabled) {
+  if (await getAIEnabled()) {
     try {
       const r = await extractReceiptWithGemini(dataUrl, categoryNames);
       return { ...r, engine: ENGINE.gemini, dataUrl };
