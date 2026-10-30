@@ -261,7 +261,7 @@ export default {
   'ai.getAdvice': 'Dapatkan saran personal',
   'ai.getAdviceSub': 'Jalankan analisis untuk menerima tips spesifik berdasarkan pengeluaranmu.',
   'ai.needKeyTitle': 'Hubungkan Gemini untuk mengaktifkan AI',
-  'ai.needKeySub': 'Tambahkan VITE_GEMINI_KEY gratis di .env.local untuk analisis nyata dan personal. Tidak ada teks contoh palsu yang ditampilkan.',
+  'ai.needKeySub': 'Isi GEMINI_API_KEY di server (environment variable Vercel) untuk analisis nyata dan personal. Tidak ada teks contoh palsu yang ditampilkan.',
   'ai.analyzing': 'Menganalisis…',
   'ai.crunching': 'Menghitung angkamu…',
   'ai.failed': 'Gagal menghasilkan wawasan',
